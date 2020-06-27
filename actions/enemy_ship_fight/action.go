@@ -3,7 +3,9 @@ package enemy_ship_fight
 import (
 	"fmt"
 	"math/rand"
+	"strconv"
 
+	"github.com/Seklfreak/yet-another-game/actions/gain_exp"
 	"github.com/Seklfreak/yet-another-game/models"
 )
 
@@ -15,8 +17,11 @@ func (a *Action) Key() string {
 }
 
 func (a *Action) Do(state *models.State) bool {
-	damage := rand.Intn(50) + 1
+	// with higher levels we take less damage
+	damage := (rand.Intn(50) + 1) / state.GetLevel()
+
 	lootCredits := rand.Intn(100) + 1
+	exp := 20 + rand.Intn(50) + 1
 
 	state.Health -= damage
 
@@ -36,5 +41,9 @@ func (a *Action) Do(state *models.State) bool {
 		lootCredits,
 		state.Credits,
 	)
+
+	state.ActionContext["gain_exp_amount"] = strconv.Itoa(exp)
+	(&gain_exp.Action{}).Do(state)
+
 	return true
 }
