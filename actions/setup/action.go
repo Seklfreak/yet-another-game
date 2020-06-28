@@ -35,5 +35,7 @@ func (a *Action) Do(state *models.State) bool {
 	}).Run()
 	state.Name = result
 
+	fmt.Printf(promptui.Styler(promptui.FGRed)("Let's start the adventure! 🚀\n"))
+
 	return false
 }
