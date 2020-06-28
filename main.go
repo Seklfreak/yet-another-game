@@ -12,15 +12,15 @@ import (
 	"github.com/Seklfreak/yet-another-game/actions/restore"
 	"github.com/Seklfreak/yet-another-game/actions/setup"
 	"github.com/Seklfreak/yet-another-game/actions/shop"
+	"github.com/Seklfreak/yet-another-game/color"
 	"github.com/Seklfreak/yet-another-game/input"
 	"github.com/Seklfreak/yet-another-game/models"
-	"github.com/manifoldco/promptui"
 )
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	fmt.Println(promptui.Styler(promptui.FGYellow)("Welcome!"))
+	fmt.Printf("%sWelcome!%s\n", color.Yellow, color.Reset)
 
 	state := models.NewState()
 

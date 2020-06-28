@@ -3,9 +3,9 @@ package setup
 import (
 	"fmt"
 
+	"github.com/Seklfreak/yet-another-game/color"
 	"github.com/Seklfreak/yet-another-game/input"
 	"github.com/Seklfreak/yet-another-game/models"
-	"github.com/manifoldco/promptui"
 )
 
 type Action struct {
@@ -25,7 +25,7 @@ func (a *Action) Do(state *models.State) bool {
 
 	state.Name = input.Text("Name your ship: ")
 
-	fmt.Printf(promptui.Styler(promptui.FGRed)("Let's start the adventure! 🚀\n"))
+	fmt.Printf("%sLet's start the adventure! 🚀%s\n", color.Red, color.Reset)
 
 	return false
 }

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/Seklfreak/yet-another-game/color"
 	"github.com/Seklfreak/yet-another-game/models"
-	"github.com/manifoldco/promptui"
 )
 
 type Action struct {
@@ -30,9 +30,7 @@ func (a *Action) Do(state *models.State) bool {
 	state.Credits -= fee
 	state.Health = 100
 
-	fmt.Printf("You paid "+
-		promptui.Styler(promptui.FGYellow)("%d credits ")+
-		"to repair your ship\n", fee)
+	fmt.Printf("You paid %s%d credits%s to repair your ship.\n", color.Yellow, fee, color.Reset)
 
 	return false
 }

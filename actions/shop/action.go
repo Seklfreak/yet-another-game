@@ -6,9 +6,9 @@ import (
 
 	"github.com/Seklfreak/yet-another-game/actions/shop_quit"
 	"github.com/Seklfreak/yet-another-game/actions/shop_repair"
+	"github.com/Seklfreak/yet-another-game/color"
 	"github.com/Seklfreak/yet-another-game/input"
 	"github.com/Seklfreak/yet-another-game/models"
-	"github.com/manifoldco/promptui"
 )
 
 type Action struct {
@@ -29,16 +29,13 @@ func (a *Action) Do(state *models.State) bool {
 	state.ActionContext["shop_repair_fee"] = strconv.Itoa(repairFee)
 
 	fmt.Println("You meet a shop!")
-	fmt.Printf(promptui.Styler(promptui.FGMagenta)("\"Welcome %s.\"\n"), state.Name)
+	fmt.Printf("%s\"Welcome %s.\"%s\n", color.Purple, state.Name, color.Reset)
 	if repairFee > 0 {
-		fmt.Printf(
-			promptui.Styler(promptui.FGMagenta)("\"We can repair your ship for ")+
-				promptui.Styler(promptui.FGYellow)("%d credits")+
-				promptui.Styler(promptui.FGMagenta)(".\"\n"), repairFee)
+		fmt.Printf("%s\"We can repair your ship for %s%d credits%s.\"%s\n",
+			color.Purple, color.Yellow, repairFee, color.Purple, color.Reset,
+		)
 	}
-	fmt.Printf("You have "+
-		promptui.Styler(promptui.FGYellow)("%d credits")+
-		".\n", state.Credits)
+	fmt.Printf("You have %s%d credits%s.\n", color.Yellow, state.Credits, color.Reset)
 
 	for {
 		repairFee = 100 - state.Health

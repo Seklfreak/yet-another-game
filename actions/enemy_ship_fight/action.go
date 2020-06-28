@@ -6,8 +6,8 @@ import (
 	"strconv"
 
 	"github.com/Seklfreak/yet-another-game/actions/gain_exp"
+	"github.com/Seklfreak/yet-another-game/color"
 	"github.com/Seklfreak/yet-another-game/models"
-	"github.com/manifoldco/promptui"
 )
 
 type Action struct {
@@ -27,28 +27,18 @@ func (a *Action) Do(state *models.State) bool {
 	state.Health -= damage
 
 	if state.Health < 0 {
-		fmt.Println(promptui.Styler(promptui.FGRed)("You did not survive the fight, game over!"))
-		fmt.Println(promptui.Styler(promptui.FGRed)("Thanks for playing."))
+		fmt.Printf("%sYou did not survive the fight, game over!%s\n", color.Red, color.Reset)
+		fmt.Printf("%sThanks for playing.%s\n", color.Red, color.Reset)
 		return true
 	}
 
 	state.Credits += lootCredits
 
-	fmt.Printf(promptui.Styler(promptui.FGRed)("You destroyed the other ship and took "+
-		promptui.Styler(promptui.FGYellow)("%d damage")+
-		promptui.Styler(promptui.FGRed)(". You have ")+
-		promptui.Styler(promptui.FGYellow)("%d health ")+
-		promptui.Styler(promptui.FGRed)("left.\n")),
-		damage,
-		state.Health,
+	fmt.Printf("%sYou destroyed the other ship and took %s%d damage%s. You have %s%d health%s left.%s\n",
+		color.Red, color.Yellow, damage, color.Red, color.Yellow, state.Health, color.Red, color.Reset,
 	)
-	fmt.Printf("After examining the ship you found "+
-		promptui.Styler(promptui.FGYellow)("%d credits")+
-		". Now you have "+
-		promptui.Styler(promptui.FGYellow)("%d credits")+
-		".\n",
-		lootCredits,
-		state.Credits,
+	fmt.Printf("After examining the ship you found %s%d credits%s. Now you have %s%d credits%s.\n",
+		color.Yellow, lootCredits, color.Reset, color.Yellow, state.Credits, color.Reset,
 	)
 
 	state.ActionContext["gain_exp_amount"] = strconv.Itoa(exp)

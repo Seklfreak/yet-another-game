@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/Seklfreak/yet-another-game/color"
 	"github.com/Seklfreak/yet-another-game/models"
-	"github.com/manifoldco/promptui"
 )
 
 type Action struct {
@@ -25,11 +25,9 @@ func (a *Action) Do(state *models.State) bool {
 	newLevel := state.GetLevel()
 
 	if newLevel > currentLevel {
-		fmt.Printf(promptui.Styler(promptui.FGRed)("Level up! You are now level %d.\n"), newLevel)
+		fmt.Printf("%sLevel up! You are now level %d.%s\n", color.Red, newLevel, color.Reset)
 	} else {
-		fmt.Printf("You gained "+
-			promptui.Styler(promptui.FGYellow)("%d EXP")+
-			".\n", amount)
+		fmt.Printf("You gained %s%d EXP%s.\n", color.Yellow, amount, color.Reset)
 	}
 
 	return false

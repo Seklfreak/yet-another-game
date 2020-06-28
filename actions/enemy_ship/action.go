@@ -7,9 +7,9 @@ import (
 
 	"github.com/Seklfreak/yet-another-game/actions/enemy_ship_fight"
 	"github.com/Seklfreak/yet-another-game/actions/enemy_ship_pay"
+	"github.com/Seklfreak/yet-another-game/color"
 	"github.com/Seklfreak/yet-another-game/input"
 	"github.com/Seklfreak/yet-another-game/models"
-	"github.com/manifoldco/promptui"
 )
 
 type Action struct {
@@ -30,16 +30,13 @@ func (a *Action) Do(state *models.State) bool {
 
 	state.ActionContext["enemy_ship_fee"] = strconv.Itoa(fee)
 
-	fmt.Println(promptui.Styler(promptui.FGRed)("You encounter another spaceship!"))
-	fmt.Printf(promptui.Styler(promptui.FGMagenta)("\"Good to meet you travellers of %s.\"\n"), state.Name)
-	fmt.Println(promptui.Styler(promptui.FGMagenta)("\"We do not want any complication to your endeavour!\""))
-	fmt.Printf(
-		promptui.Styler(promptui.FGMagenta)("\"If you pay us ")+
-			promptui.Styler(promptui.FGYellow)("%d credits ")+
-			promptui.Styler(promptui.FGMagenta)("we will move right along.\"\n"),
-		fee,
+	fmt.Printf("%sYou encounter another spaceship!%s\n", color.Red, color.Reset)
+	fmt.Printf("%s\"Good to meet you travellers of %s.\"%s\n", color.Purple, state.Name, color.Reset)
+	fmt.Printf("%s\"We do not want any complication to your endeavour!\"%s\n", color.Purple, color.Reset)
+	fmt.Printf("%s\"If you pay us %s%d credits%s we will move right along.\"\n%s",
+		color.Purple, color.Yellow, fee, color.Purple, color.Reset,
 	)
-	fmt.Printf("You have %s credits.\n", promptui.Styler(promptui.FGYellow)(fmt.Sprintf("%d credits", state.Credits)))
+	fmt.Printf("You have %s%d credits%s.\n", color.Yellow, state.Credits, color.Reset)
 
 	for {
 		result := input.Choose("What do you want to do?", loopActionKeys)
