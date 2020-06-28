@@ -13,7 +13,7 @@ go build -o yet-another-game
 ./yet-another-game
 ```
 
-### Extendability
+## Extendability
 
 The game is modular built using "actions". Each action can be hooked in at the game loop, or in other actions. The interface is defined in `models.Action`.
 
