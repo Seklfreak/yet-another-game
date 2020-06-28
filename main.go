@@ -21,18 +21,7 @@ func main() {
 
 	fmt.Println("Welcome!")
 
-	// prepare state with default values
-	state := &models.State{
-		Health:  100,
-		Credits: 100,
-
-		PositionX: 0,
-		PositionY: 0,
-
-		Encountered: map[int]map[int]bool{0: {0: true}},
-
-		ActionContext: make(map[string]string),
-	}
+	state := models.NewState()
 
 	// restore game from save game if possible
 	(&restore.Action{}).Do(state)
@@ -40,6 +29,7 @@ func main() {
 	(&setup.Action{}).Do(state)
 
 	// all actions of the general game loop
+	// new possible actions of the main game loop can be added here
 	loopActions := models.Actions{
 		&move.Action{},
 		&quit.Action{},
@@ -47,6 +37,7 @@ func main() {
 	loopActionKeys := loopActions.Keys()
 
 	// all encounters in space, with a configurable probability
+	// new encounters can be added here
 	type encounter struct {
 		Chance int
 		Action models.Action
