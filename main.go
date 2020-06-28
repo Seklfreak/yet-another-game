@@ -20,6 +20,7 @@ func main() {
 
 	fmt.Println("Welcome!")
 
+	// prepare state with default values
 	state := &models.State{
 		Health:  100,
 		Credits: 100,
@@ -32,21 +33,26 @@ func main() {
 		ActionContext: make(map[string]string),
 	}
 
+	// restore game from save game if possible
 	(&restore.Action{}).Do(state)
+	// launch game setup, eg ship name
 	(&setup.Action{}).Do(state)
 
-	loopActions := []models.Action{
+	// all actions of the general game loop
+	loopActions := models.Actions{
 		&move.Action{},
 		&quit.Action{},
 	}
+	loopActionKeys := loopActions.Keys()
 
+	// all encounters in space, with a configurable probability
 	type encounter struct {
 		Chance int
 		Action models.Action
 	}
 	encounters := []encounter{
-		{Chance: 1, Action: &nothing.Action{}},
-		{Chance: 1, Action: &enemy_ship.Action{}},
+		{Chance: 15, Action: &nothing.Action{}},
+		{Chance: 10, Action: &enemy_ship.Action{}},
 	}
 	var encountersChanceSum int
 	for _, encounter := range encounters {
@@ -54,44 +60,26 @@ func main() {
 	}
 
 	// game loop
-GameLoop:
 	for {
+		// if the health is 0 or lower, we died :( saving game and exiting
 		if state.Health <= 0 {
 			(&quit.Action{}).Do(state)
-			break GameLoop
 		}
 
-		fmt.Println("--- loop")
-
-		var items []string
-		for _, loopAction := range loopActions {
-			items = append(items, loopAction.Key())
-		}
-
+		// ask and perform action
 		_, result, _ := (&promptui.Select{
 			Label: "What do you want to do?",
-			Items: items,
+			Items: loopActionKeys,
 		}).Run()
-
-		for _, loopAction := range loopActions {
-			if result != loopAction.Key() {
-				continue
-			}
-
-			if loopAction.Do(state) {
-				break GameLoop
-			}
+		if loopActions.Do(state, result) {
+			break
 		}
 
-		if !state.Encountered[state.PositionX][state.PositionY] {
-			// mark position as encountered
-			if state.Encountered[state.PositionX] == nil {
-				state.Encountered[state.PositionX] = make(map[int]bool)
-			}
-			state.Encountered[state.PositionX][state.PositionY] = true
-
+		// discover new space tile if undiscovered
+		if discover(state) {
 			fmt.Printf("Discovering X %d Y %d…\n", state.PositionX, state.PositionY)
 
+			// find and do random encounter
 			discovery := rand.Intn(encountersChanceSum)
 			for _, encounter := range encounters {
 				if discovery < encounter.Chance {
@@ -104,4 +92,20 @@ GameLoop:
 		}
 	}
 
+}
+
+// discover returns true if a tile has not been discovered yet
+// it will mark the tile as discovered
+func discover(state *models.State) bool {
+	if state.Encountered[state.PositionX][state.PositionY] {
+		return false
+	}
+
+	// mark position as encountered
+	if state.Encountered[state.PositionX] == nil {
+		state.Encountered[state.PositionX] = make(map[int]bool)
+	}
+	state.Encountered[state.PositionX][state.PositionY] = true
+
+	return true
 }

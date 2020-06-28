@@ -19,15 +19,11 @@ func (a *Action) Key() string {
 }
 
 func (a *Action) Do(state *models.State) bool {
-	loopActions := []models.Action{
+	loopActions := models.Actions{
 		&enemy_ship_pay.Action{},
 		&enemy_ship_fight.Action{},
 	}
-
-	var items []string
-	for _, loopAction := range loopActions {
-		items = append(items, loopAction.Key())
-	}
+	loopActionKeys := loopActions.Keys()
 
 	fee := rand.Intn(25) + 1
 
@@ -39,21 +35,13 @@ func (a *Action) Do(state *models.State) bool {
 	fmt.Printf("\"If you pay us %d credits we will move right along.\"\n", fee)
 	fmt.Printf("You have %d credits.\n", state.Credits)
 
-GameLoop:
 	for {
 		_, result, _ := (&promptui.Select{
 			Label: "What do you want to do?",
-			Items: items,
+			Items: loopActionKeys,
 		}).Run()
-
-		for _, loopAction := range loopActions {
-			if result != loopAction.Key() {
-				continue
-			}
-
-			if loopAction.Do(state) {
-				break GameLoop
-			}
+		if loopActions.Do(state, result) {
+			break
 		}
 	}
 
