@@ -11,6 +11,7 @@ import (
 	"github.com/Seklfreak/yet-another-game/actions/quit"
 	"github.com/Seklfreak/yet-another-game/actions/restore"
 	"github.com/Seklfreak/yet-another-game/actions/setup"
+	"github.com/Seklfreak/yet-another-game/actions/shop"
 	"github.com/Seklfreak/yet-another-game/models"
 	"github.com/manifoldco/promptui"
 )
@@ -53,6 +54,7 @@ func main() {
 	encounters := []encounter{
 		{Chance: 15, Action: &nothing.Action{}},
 		{Chance: 10, Action: &enemy_ship.Action{}},
+		{Chance: 5, Action: &shop.Action{}},
 	}
 	var encountersChanceSum int
 	for _, encounter := range encounters {
@@ -64,6 +66,7 @@ func main() {
 		// if the health is 0 or lower, we died :( saving game and exiting
 		if state.Health <= 0 {
 			(&quit.Action{}).Do(state)
+			break
 		}
 
 		// ask and perform action

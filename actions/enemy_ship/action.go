@@ -29,7 +29,7 @@ func (a *Action) Do(state *models.State) bool {
 
 	state.ActionContext["enemy_ship_fee"] = strconv.Itoa(fee)
 
-	fmt.Println("Oh no, you encounter another spaceship!")
+	fmt.Println("You encounter another spaceship!")
 	fmt.Printf("\"Good to meet you travellers of %s.\"\n", state.Name)
 	fmt.Println("\"We do not want any complication to your endeavour!\"")
 	fmt.Printf("\"If you pay us %d credits we will move right along.\"\n", fee)
