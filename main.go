@@ -12,6 +12,7 @@ import (
 	"github.com/Seklfreak/yet-another-game/actions/restore"
 	"github.com/Seklfreak/yet-another-game/actions/setup"
 	"github.com/Seklfreak/yet-another-game/actions/shop"
+	"github.com/Seklfreak/yet-another-game/input"
 	"github.com/Seklfreak/yet-another-game/models"
 	"github.com/manifoldco/promptui"
 )
@@ -61,10 +62,7 @@ func main() {
 		}
 
 		// ask and perform action
-		_, result, _ := (&promptui.Select{
-			Label: "What do you want to do?",
-			Items: loopActionKeys,
-		}).Run()
+		result := input.Choose("What do you want to do?", loopActionKeys)
 		if loopActions.Do(state, result) {
 			break
 		}

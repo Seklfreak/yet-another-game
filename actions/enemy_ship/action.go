@@ -7,6 +7,7 @@ import (
 
 	"github.com/Seklfreak/yet-another-game/actions/enemy_ship_fight"
 	"github.com/Seklfreak/yet-another-game/actions/enemy_ship_pay"
+	"github.com/Seklfreak/yet-another-game/input"
 	"github.com/Seklfreak/yet-another-game/models"
 	"github.com/manifoldco/promptui"
 )
@@ -41,10 +42,7 @@ func (a *Action) Do(state *models.State) bool {
 	fmt.Printf("You have %s credits.\n", promptui.Styler(promptui.FGYellow)(fmt.Sprintf("%d credits", state.Credits)))
 
 	for {
-		_, result, _ := (&promptui.Select{
-			Label: "What do you want to do?",
-			Items: loopActionKeys,
-		}).Run()
+		result := input.Choose("What do you want to do?", loopActionKeys)
 		if loopActions.Do(state, result) {
 			break
 		}

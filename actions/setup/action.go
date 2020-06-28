@@ -1,9 +1,9 @@
 package setup
 
 import (
-	"errors"
 	"fmt"
 
+	"github.com/Seklfreak/yet-another-game/input"
 	"github.com/Seklfreak/yet-another-game/models"
 	"github.com/manifoldco/promptui"
 )
@@ -23,17 +23,7 @@ func (a *Action) Do(state *models.State) bool {
 	fmt.Println("You are an explorer out to seek luck in the deeps of galactic space.")
 	fmt.Println("You just got your first own ship.")
 
-	result, _ := (&promptui.Prompt{
-		Label: "Name your ship",
-		Validate: func(input string) error {
-			if len(input) <= 0 {
-				return errors.New("too short")
-			}
-
-			return nil
-		},
-	}).Run()
-	state.Name = result
+	state.Name = input.Text("Name your ship: ")
 
 	fmt.Printf(promptui.Styler(promptui.FGRed)("Let's start the adventure! 🚀\n"))
 

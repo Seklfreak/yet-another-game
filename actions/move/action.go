@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Seklfreak/yet-another-game/input"
 	"github.com/Seklfreak/yet-another-game/models"
-	"github.com/manifoldco/promptui"
 )
 
 type Action struct {
@@ -30,11 +30,10 @@ func (a *Action) Do(state *models.State) bool {
 		}
 	}
 
-	_, result, _ := (&promptui.Select{
-		Label: fmt.Sprintf("You are at X %d Y %d, where do you want to go?", state.PositionX, state.PositionY),
-		Items: options,
-		Size:  len(options),
-	}).Run()
+	result := input.Choose(
+		fmt.Sprintf("You are at X %d Y %d, where do you want to go?", state.PositionX, state.PositionY),
+		options,
+	)
 
 	params := strings.Split(result, " ")
 	state.PositionX, _ = strconv.Atoi(params[1])

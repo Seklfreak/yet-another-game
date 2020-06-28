@@ -6,6 +6,7 @@ import (
 
 	"github.com/Seklfreak/yet-another-game/actions/shop_quit"
 	"github.com/Seklfreak/yet-another-game/actions/shop_repair"
+	"github.com/Seklfreak/yet-another-game/input"
 	"github.com/Seklfreak/yet-another-game/models"
 	"github.com/manifoldco/promptui"
 )
@@ -43,10 +44,7 @@ func (a *Action) Do(state *models.State) bool {
 		repairFee = 100 - state.Health
 		state.ActionContext["shop_repair_fee"] = strconv.Itoa(repairFee)
 
-		_, result, _ := (&promptui.Select{
-			Label: "What do you want to do?",
-			Items: loopActionKeys,
-		}).Run()
+		result := input.Choose("What do you want to do?", loopActionKeys)
 		if loopActions.Do(state, result) {
 			break
 		}
