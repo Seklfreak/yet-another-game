@@ -7,6 +7,7 @@ import (
 
 	"github.com/Seklfreak/yet-another-game/actions/gain_exp"
 	"github.com/Seklfreak/yet-another-game/models"
+	"github.com/manifoldco/promptui"
 )
 
 type Action struct {
@@ -26,18 +27,26 @@ func (a *Action) Do(state *models.State) bool {
 	state.Health -= damage
 
 	if state.Health < 0 {
-		fmt.Println("You did not survive the fight, game over!")
-		fmt.Println("Thanks for playing.")
+		fmt.Println(promptui.Styler(promptui.FGRed)("You did not survive the fight, game over!"))
+		fmt.Println(promptui.Styler(promptui.FGRed)("Thanks for playing."))
 		return true
 	}
 
 	state.Credits += lootCredits
 
-	fmt.Printf("You destroyed the other ship and took %d damage. You have %d health left.\n",
+	fmt.Printf(promptui.Styler(promptui.FGRed)("You destroyed the other ship and took "+
+		promptui.Styler(promptui.FGYellow)("%d damage")+
+		promptui.Styler(promptui.FGRed)(". You have ")+
+		promptui.Styler(promptui.FGYellow)("%d health ")+
+		promptui.Styler(promptui.FGRed)("left.\n")),
 		damage,
 		state.Health,
 	)
-	fmt.Printf("After examining the ship you found %d credits. Now you have %d credits.\n",
+	fmt.Printf("After examining the ship you found "+
+		promptui.Styler(promptui.FGYellow)("%d credits")+
+		". Now you have "+
+		promptui.Styler(promptui.FGYellow)("%d credits")+
+		".\n",
 		lootCredits,
 		state.Credits,
 	)

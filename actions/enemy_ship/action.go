@@ -29,11 +29,16 @@ func (a *Action) Do(state *models.State) bool {
 
 	state.ActionContext["enemy_ship_fee"] = strconv.Itoa(fee)
 
-	fmt.Println("You encounter another spaceship!")
-	fmt.Printf("\"Good to meet you travellers of %s.\"\n", state.Name)
-	fmt.Println("\"We do not want any complication to your endeavour!\"")
-	fmt.Printf("\"If you pay us %d credits we will move right along.\"\n", fee)
-	fmt.Printf("You have %d credits.\n", state.Credits)
+	fmt.Println(promptui.Styler(promptui.FGRed)("You encounter another spaceship!"))
+	fmt.Printf(promptui.Styler(promptui.FGMagenta)("\"Good to meet you travellers of %s.\"\n"), state.Name)
+	fmt.Println(promptui.Styler(promptui.FGMagenta)("\"We do not want any complication to your endeavour!\""))
+	fmt.Printf(
+		promptui.Styler(promptui.FGMagenta)("\"If you pay us ")+
+			promptui.Styler(promptui.FGYellow)("%d credits ")+
+			promptui.Styler(promptui.FGMagenta)("we will move right along.\"\n"),
+		fee,
+	)
+	fmt.Printf("You have %s credits.\n", promptui.Styler(promptui.FGYellow)(fmt.Sprintf("%d credits", state.Credits)))
 
 	for {
 		_, result, _ := (&promptui.Select{

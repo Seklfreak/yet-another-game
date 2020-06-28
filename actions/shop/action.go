@@ -28,11 +28,16 @@ func (a *Action) Do(state *models.State) bool {
 	state.ActionContext["shop_repair_fee"] = strconv.Itoa(repairFee)
 
 	fmt.Println("You meet a shop!")
-	fmt.Printf("\"Welcome %s.\"\n", state.Name)
+	fmt.Printf(promptui.Styler(promptui.FGMagenta)("\"Welcome %s.\"\n"), state.Name)
 	if repairFee > 0 {
-		fmt.Printf("\"We can repair your ship for %d.\"\n", repairFee)
+		fmt.Printf(
+			promptui.Styler(promptui.FGMagenta)("\"We can repair your ship for ")+
+				promptui.Styler(promptui.FGYellow)("%d credits")+
+				promptui.Styler(promptui.FGMagenta)(".\"\n"), repairFee)
 	}
-	fmt.Printf("You have %d credits.\n", state.Credits)
+	fmt.Printf("You have "+
+		promptui.Styler(promptui.FGYellow)("%d credits")+
+		".\n", state.Credits)
 
 	for {
 		repairFee = 100 - state.Health

@@ -19,7 +19,7 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	fmt.Println("Welcome!")
+	fmt.Println(promptui.Styler(promptui.FGYellow)("Welcome!"))
 
 	state := models.NewState()
 
