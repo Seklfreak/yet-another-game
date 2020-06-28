@@ -33,17 +33,18 @@ func (a *Action) Do(state *models.State) bool {
 
 	state.ActionContext["enemy_ship_fee"] = strconv.Itoa(fee)
 
-	fmt.Println("Oh no, you encounter an enemy ship!")
-	fmt.Printf("They ask you to pay a fee of %d credits to move on.\n", fee)
+	fmt.Println("Oh no, you encounter another spaceship!")
+	fmt.Printf("\"Good to meet you travellers of %s.\"\n", state.Name)
+	fmt.Println("\"We do not want any complication to your endeavour!\"")
+	fmt.Printf("\"If you pay us %d credits we will move right along.\"\n", fee)
 	fmt.Printf("You have %d credits.\n", state.Credits)
 
 GameLoop:
 	for {
-		prompt := promptui.Select{
+		_, result, _ := (&promptui.Select{
 			Label: "What do you want to do?",
 			Items: items,
-		}
-		_, result, _ := prompt.Run()
+		}).Run()
 
 		for _, loopAction := range loopActions {
 			if result != loopAction.Key() {

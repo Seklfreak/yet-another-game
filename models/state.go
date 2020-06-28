@@ -1,6 +1,8 @@
 package models
 
 type State struct {
+	Name string
+
 	Health  int
 	Credits int
 	Exp     int

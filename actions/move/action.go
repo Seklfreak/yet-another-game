@@ -30,17 +30,15 @@ func (a *Action) Do(state *models.State) bool {
 		}
 	}
 
-	prompt := promptui.Select{
+	_, result, _ := (&promptui.Select{
 		Label: fmt.Sprintf("You are at X %d Y %d, where do you want to go?", state.PositionX, state.PositionY),
 		Items: options,
 		Size:  len(options),
-	}
-	_, result, _ := prompt.Run()
+	}).Run()
 
 	params := strings.Split(result, " ")
 	state.PositionX, _ = strconv.Atoi(params[1])
 	state.PositionY, _ = strconv.Atoi(params[3])
-	fmt.Printf("moved to X %d Y %d\n", state.PositionX, state.PositionY)
 
 	return false
 }

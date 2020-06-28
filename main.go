@@ -10,6 +10,7 @@ import (
 	"github.com/Seklfreak/yet-another-game/actions/nothing"
 	"github.com/Seklfreak/yet-another-game/actions/quit"
 	"github.com/Seklfreak/yet-another-game/actions/restore"
+	"github.com/Seklfreak/yet-another-game/actions/setup"
 	"github.com/Seklfreak/yet-another-game/models"
 	"github.com/manifoldco/promptui"
 )
@@ -32,6 +33,7 @@ func main() {
 	}
 
 	(&restore.Action{}).Do(state)
+	(&setup.Action{}).Do(state)
 
 	loopActions := []models.Action{
 		&move.Action{},
@@ -66,11 +68,10 @@ GameLoop:
 			items = append(items, loopAction.Key())
 		}
 
-		prompt := promptui.Select{
+		_, result, _ := (&promptui.Select{
 			Label: "What do you want to do?",
 			Items: items,
-		}
-		_, result, _ := prompt.Run()
+		}).Run()
 
 		for _, loopAction := range loopActions {
 			if result != loopAction.Key() {
@@ -89,7 +90,7 @@ GameLoop:
 			}
 			state.Encountered[state.PositionX][state.PositionY] = true
 
-			fmt.Printf("Discovering X %d Y %d\n", state.PositionX, state.PositionY)
+			fmt.Printf("Discovering X %d Y %d…\n", state.PositionX, state.PositionY)
 
 			discovery := rand.Intn(encountersChanceSum)
 			for _, encounter := range encounters {
