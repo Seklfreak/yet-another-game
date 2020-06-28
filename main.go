@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/Seklfreak/yet-another-game/actions/delete"
 	"github.com/Seklfreak/yet-another-game/actions/enemy_ship"
 	"github.com/Seklfreak/yet-another-game/actions/move"
 	"github.com/Seklfreak/yet-another-game/actions/nothing"
@@ -57,7 +58,7 @@ func main() {
 	for {
 		// if the health is 0 or lower, we died :( saving game and exiting
 		if state.Health <= 0 {
-			(&quit.Action{}).Do(state)
+			(&delete.Action{}).Do(state)
 			break
 		}
 
